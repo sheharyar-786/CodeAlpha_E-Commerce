@@ -10,6 +10,8 @@ import '../features/checkout/presentation/pages/checkout_page.dart';
 import '../features/orders/presentation/pages/order_history_page.dart';
 import '../features/orders/presentation/pages/order_tracking_page.dart';
 import '../features/orders/data/models/order_model.dart';
+import '../features/seller/presentation/pages/seller_dashboard_page.dart';
+import '../features/seller/presentation/pages/add_product_page.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -61,6 +63,10 @@ class AppRoutes {
             order: settings.arguments as OrderModel,
           ),
         );
+      case sellerDashboard:
+        return MaterialPageRoute(builder: (_) => const SellerDashboardPage());
+      case addProduct:
+        return MaterialPageRoute(builder: (_) => const AddProductPage());
       // We will map pages here as we build them.
       default:
         return MaterialPageRoute(
