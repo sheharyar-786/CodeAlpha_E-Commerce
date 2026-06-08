@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../features/auth/presentation/pages/welcome_page.dart';
+import '../features/auth/presentation/pages/login_page.dart';
+import '../features/auth/presentation/pages/signup_page.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -19,6 +22,13 @@ class AppRoutes {
   // Navigation Helper
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case splash:
+      case welcome:
+        return MaterialPageRoute(builder: (_) => const WelcomePage());
+      case login:
+        return MaterialPageRoute(builder: (_) => const LoginPage());
+      case signup:
+        return MaterialPageRoute(builder: (_) => const SignupPage());
       // We will map pages here as we build them.
       default:
         return MaterialPageRoute(
@@ -31,3 +41,4 @@ class AppRoutes {
     }
   }
 }
+
