@@ -6,6 +6,8 @@ import 'app/theme.dart';
 import 'features/auth/data/repositories/auth_repository.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
+import 'features/product/data/repositories/product_repository.dart';
+import 'features/product/presentation/bloc/product_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,16 +21,21 @@ void main() async {
   }
 
   final authRepository = AuthRepository();
+  final productRepository = ProductRepository();
 
   runApp(
     MultiRepositoryProvider(
       providers: [
         RepositoryProvider<AuthRepository>.value(value: authRepository),
+        RepositoryProvider<ProductRepository>.value(value: productRepository),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AuthBloc>(
             create: (context) => AuthBloc(authRepository: authRepository)..add(AuthCheckRequested()),
+          ),
+          BlocProvider<ProductBloc>(
+            create: (context) => ProductBloc(productRepository: productRepository),
           ),
         ],
         child: const MyApp(),

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import '../features/auth/presentation/pages/welcome_page.dart';
 import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/signup_page.dart';
+import '../features/product/presentation/pages/home_page.dart';
+import '../features/product/presentation/pages/product_detail_page.dart';
+import '../features/product/data/models/product_model.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -29,6 +32,14 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const LoginPage());
       case signup:
         return MaterialPageRoute(builder: (_) => const SignupPage());
+      case home:
+        return MaterialPageRoute(builder: (_) => const HomePage());
+      case productDetail:
+        return MaterialPageRoute(
+          builder: (_) => ProductDetailPage(
+            product: settings.arguments as ProductModel,
+          ),
+        );
       // We will map pages here as we build them.
       default:
         return MaterialPageRoute(
@@ -41,4 +52,5 @@ class AppRoutes {
     }
   }
 }
+
 
