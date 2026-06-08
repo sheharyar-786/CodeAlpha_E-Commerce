@@ -8,6 +8,7 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'features/product/data/repositories/product_repository.dart';
 import 'features/product/presentation/bloc/product_bloc.dart';
+import 'features/cart/presentation/bloc/cart_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,12 +38,16 @@ void main() async {
           BlocProvider<ProductBloc>(
             create: (context) => ProductBloc(productRepository: productRepository),
           ),
+          BlocProvider<CartBloc>(
+            create: (context) => CartBloc(),
+          ),
         ],
         child: const MyApp(),
       ),
     ),
   );
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

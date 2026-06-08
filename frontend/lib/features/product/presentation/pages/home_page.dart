@@ -265,9 +265,20 @@ class _HomePageState extends State<HomePage> {
                         // Action Buttons (Cart / Profile)
                         Row(
                           children: [
-                            IconButton(
-                              icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
-                              onPressed: () => Navigator.pushNamed(context, AppRoutes.cart),
+                            BlocBuilder<CartBloc, CartState>(
+                              builder: (context, state) {
+                                final count = state.itemCount;
+                                return Badge(
+                                  isLabelVisible: count > 0,
+                                  label: Text(count.toString()),
+                                  backgroundColor: AppColors.accent,
+                                  textColor: Colors.white,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
+                                    onPressed: () => Navigator.pushNamed(context, AppRoutes.cart),
+                                  ),
+                                );
+                              },
                             ),
                             BlocBuilder<AuthBloc, AuthState>(
                               builder: (context, state) {

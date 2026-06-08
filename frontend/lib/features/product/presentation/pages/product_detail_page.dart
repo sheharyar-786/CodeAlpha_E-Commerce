@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/theme.dart';
 import '../../../../app/routes.dart';
 import '../../data/models/product_model.dart';
+import '../../../cart/presentation/bloc/cart_bloc.dart';
+import '../../../cart/presentation/bloc/cart_event.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final ProductModel product;
@@ -235,6 +238,7 @@ class ProductDetailPage extends StatelessWidget {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {
+                        context.read<CartBloc>().add(AddToCart(product: product, quantity: 1));
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('${product.title} added to cart!'),
