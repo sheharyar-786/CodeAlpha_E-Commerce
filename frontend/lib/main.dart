@@ -9,6 +9,8 @@ import 'features/auth/presentation/bloc/auth_event.dart';
 import 'features/product/data/repositories/product_repository.dart';
 import 'features/product/presentation/bloc/product_bloc.dart';
 import 'features/cart/presentation/bloc/cart_bloc.dart';
+import 'features/orders/data/repositories/order_repository.dart';
+import 'features/orders/presentation/bloc/orders_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,12 +25,14 @@ void main() async {
 
   final authRepository = AuthRepository();
   final productRepository = ProductRepository();
+  final orderRepository = OrderRepository();
 
   runApp(
     MultiRepositoryProvider(
       providers: [
         RepositoryProvider<AuthRepository>.value(value: authRepository),
         RepositoryProvider<ProductRepository>.value(value: productRepository),
+        RepositoryProvider<OrderRepository>.value(value: orderRepository),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -40,6 +44,9 @@ void main() async {
           ),
           BlocProvider<CartBloc>(
             create: (context) => CartBloc(),
+          ),
+          BlocProvider<OrdersBloc>(
+            create: (context) => OrdersBloc(orderRepository: orderRepository),
           ),
         ],
         child: const MyApp(),
