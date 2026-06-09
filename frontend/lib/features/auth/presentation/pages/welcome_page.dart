@@ -64,7 +64,7 @@ class WelcomePage extends StatelessWidget {
                 // Subtitle
                 Text(
                   'The Premium Peer-to-Peer E-Commerce Platform',
-                  textAlign: Center,
+                  textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textSecondary,
                         fontSize: 15,

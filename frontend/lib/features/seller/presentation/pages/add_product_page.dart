@@ -4,10 +4,10 @@ import 'package:uuid/uuid.dart';
 import '../../../../app/theme.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
-import '../../data/models/product_model.dart';
-import '../../presentation/bloc/product_bloc.dart';
-import '../../presentation/bloc/product_event.dart';
-import '../../presentation/bloc/product_state.dart';
+import '../../../product/data/models/product_model.dart';
+import '../../../product/presentation/bloc/product_bloc.dart';
+import '../../../product/presentation/bloc/product_event.dart';
+import '../../../product/presentation/bloc/product_state.dart';
 
 class AddProductPage extends StatefulWidget {
   const AddProductPage({super.key});

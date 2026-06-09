@@ -76,7 +76,7 @@ class AppTheme {
         onSurface: AppColors.textPrimary,
         onBackground: AppColors.textPrimary,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: AppColors.darkCard,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -189,7 +189,7 @@ class AppTheme {
         onSurface: AppColors.lightTextPrimary,
         onBackground: AppColors.lightTextPrimary,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: AppColors.lightCard,
         elevation: 0,
         shape: RoundedRectangleBorder(

@@ -4,10 +4,14 @@ import '../../../../app/theme.dart';
 import '../../../../app/routes.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
+import '../../../auth/presentation/bloc/auth_event.dart';
+import '../../../auth/data/models/user_model.dart';
 import '../../data/models/product_model.dart';
 import '../bloc/product_bloc.dart';
 import '../bloc/product_event.dart';
 import '../bloc/product_state.dart';
+import '../../../cart/presentation/bloc/cart_bloc.dart';
+import '../../../cart/presentation/bloc/cart_state.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
