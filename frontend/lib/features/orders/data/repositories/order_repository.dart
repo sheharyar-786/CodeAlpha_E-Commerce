@@ -3,10 +3,12 @@ import '../../data/models/order_model.dart';
 import '../../../auth/data/repositories/auth_repository.dart';
 
 class OrderRepository {
-  final FirebaseFirestore _firestore;
+  final FirebaseFirestore? _firestore;
+
+  FirebaseFirestore get firestore => _firestore ?? FirebaseFirestore.instance;
 
   OrderRepository({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+      : _firestore = firestore;
 
   // Premium Mock Orders
   static final List<OrderModel> _mockOrders = [
@@ -53,7 +55,7 @@ class OrderRepository {
     }
 
     try {
-      final QuerySnapshot snapshot = await _firestore
+      final QuerySnapshot snapshot = await firestore
           .collection('orders')
           .where('buyerId', isEqualTo: buyerId)
           .orderBy('createdAt', descending: true)
@@ -78,7 +80,7 @@ class OrderRepository {
     }
 
     try {
-      await _firestore.collection('orders').doc(order.id).set(order.toMap());
+      await firestore.collection('orders').doc(order.id).set(order.toMap());
     } catch (e) {
       if (e.toString().contains('no-app') || e.toString().contains('core/')) {
         AuthRepository.useMock = true;
@@ -99,7 +101,7 @@ class OrderRepository {
     }
 
     try {
-      await _firestore
+      await firestore
           .collection('orders')
           .doc(orderId)
           .update({'status': status.toString().split('.').last});
@@ -122,7 +124,7 @@ class OrderRepository {
 
     try {
       // In firestore, we would query orders and filter items on client side, or query orders subcollection
-      final QuerySnapshot snapshot = await _firestore.collection('orders').get();
+      final QuerySnapshot snapshot = await firestore.collection('orders').get();
       final allOrders = snapshot.docs
           .map((doc) => OrderModel.fromMap(doc.data() as Map<String, dynamic>))
           .toList();

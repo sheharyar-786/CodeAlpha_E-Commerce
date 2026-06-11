@@ -3,8 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user_model.dart';
 
 class AuthRepository {
-  final FirebaseAuth _firebaseAuth;
-  final FirebaseFirestore _firestore;
+  final FirebaseAuth? _firebaseAuth;
+  final FirebaseFirestore? _firestore;
+
+  FirebaseAuth get auth => _firebaseAuth ?? FirebaseAuth.instance;
+  FirebaseFirestore get firestore => _firestore ?? FirebaseFirestore.instance;
 
   // For offline/mock development if Firebase is not configured yet
   static bool useMock = false;
@@ -13,8 +16,8 @@ class AuthRepository {
   AuthRepository({
     FirebaseAuth? firebaseAuth,
     FirebaseFirestore? firestore,
-  })  : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        _firestore = firestore ?? FirebaseFirestore.instance;
+  })  : _firebaseAuth = firebaseAuth,
+        _firestore = firestore;
 
   Future<UserModel?> signUp({
     required String email,
@@ -35,7 +38,7 @@ class AuthRepository {
     }
 
     try {
-      final UserCredential credential = await _firebaseAuth.createUserWithEmailAndPassword(
+      final UserCredential credential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -50,7 +53,7 @@ class AuthRepository {
           createdAt: DateTime.now(),
         );
 
-        await _firestore.collection('users').doc(firebaseUser.uid).set(newUser.toMap());
+        await firestore.collection('users').doc(firebaseUser.uid).set(newUser.toMap());
         return newUser;
       }
       return null;
@@ -84,7 +87,7 @@ class AuthRepository {
     }
 
     try {
-      final UserCredential credential = await _firebaseAuth.signInWithEmailAndPassword(
+      final UserCredential credential = await auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -109,7 +112,7 @@ class AuthRepository {
     }
 
     try {
-      final DocumentSnapshot doc = await _firestore.collection('users').doc(uid).get();
+      final DocumentSnapshot doc = await firestore.collection('users').doc(uid).get();
       if (doc.exists) {
         return UserModel.fromMap(doc.data() as Map<String, dynamic>);
       }
@@ -126,7 +129,7 @@ class AuthRepository {
       return;
     }
     try {
-      await _firebaseAuth.signOut();
+      await auth.signOut();
     } catch (e) {
       // Ignore
     }
@@ -137,7 +140,7 @@ class AuthRepository {
       return _mockUser;
     }
     try {
-      final User? firebaseUser = _firebaseAuth.currentUser;
+      final User? firebaseUser = auth.currentUser;
       if (firebaseUser != null) {
         return await getUserProfile(firebaseUser.uid);
       }

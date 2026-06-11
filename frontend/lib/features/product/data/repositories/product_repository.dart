@@ -3,10 +3,12 @@ import '../../data/models/product_model.dart';
 import '../../../auth/data/repositories/auth_repository.dart';
 
 class ProductRepository {
-  final FirebaseFirestore _firestore;
+  final FirebaseFirestore? _firestore;
+
+  FirebaseFirestore get firestore => _firestore ?? FirebaseFirestore.instance;
 
   ProductRepository({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+      : _firestore = firestore;
 
   // Premium Mock Data
   static final List<ProductModel> _mockProducts = [
@@ -87,7 +89,7 @@ class ProductRepository {
     }
 
     try {
-      Query query = _firestore.collection('products');
+      Query query = firestore.collection('products');
       if (category != null && category != 'All') {
         query = query.where('category', isEqualTo: category);
       }
@@ -117,7 +119,7 @@ class ProductRepository {
 
     try {
       // Basic text search. For premium production, one would use Algolia or client-side filter for moderate size
-      final QuerySnapshot snapshot = await _firestore.collection('products').get();
+      final QuerySnapshot snapshot = await firestore.collection('products').get();
       final all = snapshot.docs
           .map((doc) => ProductModel.fromMap(doc.data() as Map<String, dynamic>))
           .toList();
@@ -142,7 +144,7 @@ class ProductRepository {
     }
 
     try {
-      final QuerySnapshot snapshot = await _firestore
+      final QuerySnapshot snapshot = await firestore
           .collection('products')
           .where('sellerId', isEqualTo: sellerId)
           .get();
@@ -166,7 +168,7 @@ class ProductRepository {
     }
 
     try {
-      await _firestore.collection('products').doc(product.id).set(product.toMap());
+      await firestore.collection('products').doc(product.id).set(product.toMap());
     } catch (e) {
       if (e.toString().contains('no-app') || e.toString().contains('core/')) {
         AuthRepository.useMock = true;
