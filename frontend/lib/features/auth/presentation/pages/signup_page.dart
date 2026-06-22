@@ -159,7 +159,7 @@ class _SignupPageState extends State<SignupPage> {
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _nameController,
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : AppColors.lightTextPrimary),
                     decoration: const InputDecoration(
                       hintText: 'Enter your name',
                       prefixIcon: Icon(Icons.person_outline, color: AppColors.textMuted),
@@ -185,7 +185,7 @@ class _SignupPageState extends State<SignupPage> {
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : AppColors.lightTextPrimary),
                     decoration: const InputDecoration(
                       hintText: 'Enter your email',
                       prefixIcon: Icon(Icons.email_outlined, color: AppColors.textMuted),
@@ -214,7 +214,7 @@ class _SignupPageState extends State<SignupPage> {
                   TextFormField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : AppColors.lightTextPrimary),
                     decoration: InputDecoration(
                       hintText: 'Choose a strong password',
                       prefixIcon: const Icon(Icons.lock_outlined, color: AppColors.textMuted),
