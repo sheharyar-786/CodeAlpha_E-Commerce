@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../app/theme.dart';
+import '../../../../core/widgets/image_helper.dart';
 import '../../data/models/order_model.dart';
 
 class OrderTrackingPage extends StatelessWidget {
@@ -232,7 +233,7 @@ class OrderTrackingPage extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           image: DecorationImage(
-                            image: NetworkImage(item.imageUrl),
+                            image: getImageProvider(item.imageUrl),
                             fit: BoxFit.cover,
                           ),
                         ),

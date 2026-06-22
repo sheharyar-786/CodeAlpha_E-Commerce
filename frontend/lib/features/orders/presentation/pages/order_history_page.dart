@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/theme.dart';
 import '../../../../app/routes.dart';
+import '../../../../core/widgets/image_helper.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../data/models/order_model.dart';
@@ -101,7 +102,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: const Color(0xFF2E2E50)),
                     image: DecorationImage(
-                      image: NetworkImage(item.imageUrl),
+                      image: getImageProvider(item.imageUrl),
                       fit: BoxFit.cover,
                     ),
                   ),

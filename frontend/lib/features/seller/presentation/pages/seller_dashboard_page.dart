@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/theme.dart';
 import '../../../../app/routes.dart';
+import '../../../../core/widgets/image_helper.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../../product/presentation/bloc/product_bloc.dart';
@@ -94,7 +95,7 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> with SingleTi
                       height: 50,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        image: DecorationImage(image: NetworkImage(prod.imageUrl), fit: BoxFit.cover),
+                        image: DecorationImage(image: getImageProvider(prod.imageUrl), fit: BoxFit.cover),
                       ),
                     ),
                     const SizedBox(width: 12),

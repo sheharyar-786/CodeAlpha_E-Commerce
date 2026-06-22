@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../app/theme.dart';
+import '../../../../core/widgets/image_helper.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../../product/data/models/product_model.dart';
@@ -26,6 +29,39 @@ class _AddProductPageState extends State<AddProductPage> {
   String _selectedCategory = 'Electronics';
   final List<String> _categories = ['Electronics', 'Fashion', 'Accessories', 'Home'];
   String _imageUrl = 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop'; // Default placeholder
+
+  Future<void> _pickImage() async {
+    try {
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 60, // Compress image to ~50-100KB to stay way below Firestore 1MB limit
+        maxWidth: 800,    // Resize width
+        maxHeight: 800,   // Resize height
+      );
+      if (image != null) {
+        final bytes = await image.readAsBytes();
+        final base64String = base64Encode(bytes);
+        final fileExtension = image.name.split('.').last.toLowerCase();
+        final mimeType = fileExtension == 'png' ? 'image/png' : 'image/jpeg';
+        final base64Image = 'data:$mimeType;base64,$base64String';
+        setState(() {
+          _imageUrl = base64Image;
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Image loaded and converted successfully!'), duration: Duration(seconds: 1)),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error picking image: $e'), backgroundColor: AppColors.error),
+        );
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -114,22 +150,9 @@ class _AddProductPageState extends State<AddProductPage> {
           child: ListView(
             padding: const EdgeInsets.all(24),
             children: [
-              // Image Picker Box Simulation
+              // Image Picker Box using real Image Picker
               GestureDetector(
-                onTap: () {
-                  // Simulate image picking from gallery
-                  setState(() {
-                    // Cycles mock images for variety
-                    if (_imageUrl.contains('photo-1542291026')) {
-                      _imageUrl = 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=600&auto=format&fit=crop'; // shoes
-                    } else {
-                      _imageUrl = 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop'; // red sneaker
-                    }
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Image loaded from gallery simulation.'), duration: Duration(seconds: 1)),
-                  );
-                },
+                onTap: _pickImage,
                 child: Container(
                   height: 180,
                   decoration: BoxDecoration(
@@ -137,7 +160,7 @@ class _AddProductPageState extends State<AddProductPage> {
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: const Color(0xFF2E2E50)),
                     image: DecorationImage(
-                      image: NetworkImage(_imageUrl),
+                      image: getImageProvider(_imageUrl),
                       fit: BoxFit.cover,
                       opacity: 0.8,
                     ),

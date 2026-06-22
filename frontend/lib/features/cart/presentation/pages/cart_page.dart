@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/theme.dart';
 import '../../../../app/routes.dart';
+import '../../../../core/widgets/image_helper.dart';
 import '../bloc/cart_bloc.dart';
 import '../bloc/cart_event.dart';
 import '../bloc/cart_state.dart';
@@ -119,7 +120,7 @@ class CartPage extends StatelessWidget {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16),
                                 image: DecorationImage(
-                                  image: NetworkImage(item.product.imageUrl),
+                                  image: getImageProvider(item.product.imageUrl),
                                   fit: BoxFit.cover,
                                 ),
                               ),

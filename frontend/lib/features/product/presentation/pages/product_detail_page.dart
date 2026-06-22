@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/theme.dart';
 import '../../../../app/routes.dart';
+import '../../../../core/widgets/image_helper.dart';
 import '../../data/models/product_model.dart';
 import '../../../cart/presentation/bloc/cart_bloc.dart';
 import '../../../cart/presentation/bloc/cart_event.dart';
@@ -54,7 +55,7 @@ class ProductDetailPage extends StatelessWidget {
                 flexibleSpace: FlexibleSpaceBar(
                   background: Hero(
                     tag: 'product-image-${product.id}',
-                    child: Image.network(
+                    child: buildProductImage(
                       product.imageUrl,
                       fit: BoxFit.cover,
                     ),

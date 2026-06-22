@@ -4,6 +4,7 @@ import '../../../../app/theme.dart';
 import '../../../../app/theme_cubit.dart';
 import '../../../../app/routes.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
+import '../../../../core/widgets/image_helper.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../../auth/presentation/bloc/auth_event.dart';
@@ -104,53 +105,53 @@ class _HomePageState extends State<HomePage> {
                     ? Colors.white 
                     : (isDark ? AppColors.textSecondary : AppColors.lightTextSecondary),
                 fontSize: 13,
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProductCard(ProductModel product) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          AppRoutes.productDetail,
-          arguments: product,
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: isDark ? AppColors.darkCard : AppColors.lightCard,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isDark ? const Color(0xFF2E2E50) : Colors.grey.shade300,
-            width: 1,
+            ],
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Image with Category badge
-            Expanded(
-              child: Stack(
-                children: [
-                  Hero(
-                    tag: 'product-image-${product.id}',
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-                        image: DecorationImage(
-                          image: NetworkImage(product.imageUrl),
-                          fit: BoxFit.cover,
+      );
+    }
+  
+    Widget _buildProductCard(ProductModel product) {
+      final isDark = Theme.of(context).brightness == Brightness.dark;
+      return GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            AppRoutes.productDetail,
+            arguments: product,
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.darkCard : AppColors.lightCard,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: isDark ? const Color(0xFF2E2E50) : Colors.grey.shade300,
+              width: 1,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Image with Category badge
+              Expanded(
+                child: Stack(
+                  children: [
+                    Hero(
+                      tag: 'product-image-${product.id}',
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                          image: DecorationImage(
+                            image: getImageProvider(product.imageUrl),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
-                  ),
                   Positioned(
                     top: 10,
                     left: 10,
