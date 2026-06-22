@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../features/auth/presentation/pages/welcome_page.dart';
+import '../features/auth/presentation/pages/splash_page.dart';
 import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/signup_page.dart';
 import '../features/product/presentation/pages/home_page.dart';
@@ -33,6 +34,7 @@ class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
+        return MaterialPageRoute(builder: (_) => const SplashPage());
       case welcome:
         return MaterialPageRoute(builder: (_) => const WelcomePage());
       case login:
