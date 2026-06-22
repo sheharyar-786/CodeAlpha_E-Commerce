@@ -76,10 +76,14 @@ class AuthRepository {
       if (_mockUser != null && _mockUser!.email == email) {
         return _mockUser;
       }
+      final String extractedName = email.split('@').first;
+      final String capitalizedName = extractedName.isNotEmpty
+          ? '${extractedName[0].toUpperCase()}${extractedName.substring(1)}'
+          : 'User';
       _mockUser = UserModel(
         uid: 'mock_uid_123',
         email: email,
-        name: 'Demo User',
+        name: capitalizedName,
         role: UserRole.both,
         createdAt: DateTime.now(),
       );
