@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/theme.dart';
+import '../../../../app/theme_cubit.dart';
 import '../../../../app/routes.dart';
+import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../../auth/presentation/bloc/auth_event.dart';
@@ -56,6 +58,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildCategoryChip(String name, IconData icon) {
     final isSelected = _selectedCategory == name;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () => _onCategorySelected(name),
       child: AnimatedContainer(
@@ -63,10 +66,14 @@ class _HomePageState extends State<HomePage> {
         margin: const EdgeInsets.only(right: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : AppColors.darkCard,
+          color: isSelected 
+              ? AppColors.primary 
+              : (isDark ? AppColors.darkCard : AppColors.lightCard),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? AppColors.primary : const Color(0xFF2E2E50),
+            color: isSelected 
+                ? AppColors.primary 
+                : (isDark ? const Color(0xFF2E2E50) : Colors.grey.shade300),
             width: 1,
           ),
           boxShadow: isSelected
@@ -84,14 +91,18 @@ class _HomePageState extends State<HomePage> {
             Icon(
               icon,
               size: 18,
-              color: isSelected ? Colors.white : AppColors.textSecondary,
+              color: isSelected 
+                  ? Colors.white 
+                  : (isDark ? AppColors.textSecondary : AppColors.lightTextSecondary),
             ),
             const SizedBox(width: 8),
             Text(
               name,
               style: TextStyle(
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected ? Colors.white : AppColors.textSecondary,
+                color: isSelected 
+                    ? Colors.white 
+                    : (isDark ? AppColors.textSecondary : AppColors.lightTextSecondary),
                 fontSize: 13,
               ),
             ),
@@ -102,6 +113,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildProductCard(ProductModel product) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(
@@ -112,9 +124,12 @@ class _HomePageState extends State<HomePage> {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.darkCard,
+          color: isDark ? AppColors.darkCard : AppColors.lightCard,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFF2E2E50), width: 1),
+          border: Border.all(
+            color: isDark ? const Color(0xFF2E2E50) : Colors.grey.shade300,
+            width: 1,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,13 +138,16 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: Stack(
                 children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-                      image: DecorationImage(
-                        image: NetworkImage(product.imageUrl),
-                        fit: BoxFit.cover,
+                  Hero(
+                    tag: 'product-image-${product.id}',
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                        image: DecorationImage(
+                          image: NetworkImage(product.imageUrl),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -154,7 +172,7 @@ class _HomePageState extends State<HomePage> {
                     child: Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: AppColors.darkBackground.withOpacity(0.8),
+                        color: (isDark ? AppColors.darkBackground : AppColors.lightBackground).withOpacity(0.8),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.favorite_border, size: 16, color: AppColors.accent),
@@ -174,18 +192,18 @@ class _HomePageState extends State<HomePage> {
                     product.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
-                      color: Colors.white,
+                      color: isDark ? Colors.white : AppColors.lightTextPrimary,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'by ${product.sellerName}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
-                      color: AppColors.textMuted,
+                      color: isDark ? AppColors.textMuted : Colors.grey.shade600,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -194,10 +212,10 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Text(
                         '\$${product.price.toStringAsFixed(2)}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.secondary,
+                          color: isDark ? AppColors.secondary : AppColors.primary,
                         ),
                       ),
                       Row(
@@ -206,7 +224,11 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(width: 2),
                           Text(
                             product.rating.toString(),
-                            style: const TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: isDark ? Colors.white : AppColors.lightTextPrimary,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
@@ -245,6 +267,7 @@ class _HomePageState extends State<HomePage> {
                               name = state.user.name;
                               role = state.user.role;
                             }
+                            final isDark = Theme.of(context).brightness == Brightness.dark;
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -252,6 +275,7 @@ class _HomePageState extends State<HomePage> {
                                   'Hello, $name!',
                                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                         fontWeight: FontWeight.bold,
+                                        color: isDark ? Colors.white : AppColors.lightTextPrimary,
                                       ),
                                 ),
                                 const SizedBox(height: 4),
@@ -259,26 +283,48 @@ class _HomePageState extends State<HomePage> {
                                   role == UserRole.seller 
                                       ? 'Seller Portal active'
                                       : 'Explore custom handpicks for you',
-                                  style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+                                  style: TextStyle(
+                                    color: isDark ? AppColors.textMuted : AppColors.lightTextSecondary, 
+                                    fontSize: 13,
+                                  ),
                                 ),
                               ],
                             );
                           },
                         ),
                         
-                        // Action Buttons (Cart / Profile)
+                        // Action Buttons (Theme / Cart / Dashboard / Logout)
                         Row(
                           children: [
+                            BlocBuilder<ThemeCubit, ThemeMode>(
+                              builder: (context, mode) {
+                                final isDark = mode == ThemeMode.dark;
+                                return IconButton(
+                                  icon: Icon(
+                                    isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+                                    color: isDark ? Colors.white : AppColors.lightTextPrimary,
+                                  ),
+                                  onPressed: () {
+                                    context.read<ThemeCubit>().toggleTheme();
+                                  },
+                                  tooltip: 'Toggle Theme',
+                                );
+                              },
+                            ),
                             BlocBuilder<CartBloc, CartState>(
                               builder: (context, state) {
                                 final count = state.itemCount;
+                                final isDark = Theme.of(context).brightness == Brightness.dark;
                                 return Badge(
                                   isLabelVisible: count > 0,
                                   label: Text(count.toString()),
                                   backgroundColor: AppColors.accent,
                                   textColor: Colors.white,
                                   child: IconButton(
-                                    icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
+                                    icon: Icon(
+                                      Icons.shopping_cart_outlined, 
+                                      color: isDark ? Colors.white : AppColors.lightTextPrimary,
+                                    ),
                                     onPressed: () => Navigator.pushNamed(context, AppRoutes.cart),
                                   ),
                                 );
@@ -288,9 +334,13 @@ class _HomePageState extends State<HomePage> {
                               builder: (context, state) {
                                 final isSeller = state is Authenticated && 
                                     (state.user.role == UserRole.seller || state.user.role == UserRole.both);
+                                final isDark = Theme.of(context).brightness == Brightness.dark;
                                 if (isSeller) {
                                   return IconButton(
-                                    icon: const Icon(Icons.storefront_outlined, color: AppColors.secondary),
+                                    icon: Icon(
+                                      Icons.storefront_outlined, 
+                                      color: isDark ? AppColors.secondary : AppColors.primary,
+                                    ),
                                     onPressed: () => Navigator.pushNamed(context, AppRoutes.sellerDashboard),
                                     tooltip: 'Seller Dashboard',
                                   );
@@ -315,7 +365,7 @@ class _HomePageState extends State<HomePage> {
                     TextField(
                       controller: _searchController,
                       onChanged: _onSearchChanged,
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : AppColors.lightTextPrimary),
                       decoration: InputDecoration(
                         hintText: 'Search products, electronics, gear...',
                         prefixIcon: const Icon(Icons.search, color: AppColors.textMuted),
@@ -390,9 +440,13 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 24),
 
                     // Category header
-                    const Text(
+                    Text(
                       'Categories',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold, 
+                        fontSize: 18, 
+                        color: Theme.of(context).brightness == Brightness.dark ? Colors.white : AppColors.lightTextPrimary,
+                      ),
                     ),
                     const SizedBox(height: 12),
 
@@ -415,9 +469,7 @@ class _HomePageState extends State<HomePage> {
             child: BlocBuilder<ProductBloc, ProductState>(
               builder: (context, state) {
                 if (state is ProductLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(color: AppColors.primary),
-                  );
+                  return const ShimmerLoader();
                 } else if (state is ProductsLoaded) {
                   final products = state.products;
                   if (products.isEmpty) {

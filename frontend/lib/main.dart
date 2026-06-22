@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'app/routes.dart';
 import 'app/theme.dart';
+import 'app/theme_cubit.dart';
 import 'features/auth/data/repositories/auth_repository.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
@@ -48,6 +49,9 @@ void main() async {
           BlocProvider<OrdersBloc>(
             create: (context) => OrdersBloc(orderRepository: orderRepository),
           ),
+          BlocProvider<ThemeCubit>(
+            create: (context) => ThemeCubit(),
+          ),
         ],
         child: const MyApp(),
       ),
@@ -61,14 +65,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'NovaMarket',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.dark, // Defaulting to premium dark mode
-      initialRoute: AppRoutes.welcome,
-      onGenerateRoute: AppRoutes.onGenerateRoute,
+    return BlocBuilder<ThemeCubit, ThemeMode>(
+      builder: (context, themeMode) {
+        return MaterialApp(
+          title: 'NovaMarket',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: themeMode,
+          initialRoute: AppRoutes.welcome,
+          onGenerateRoute: AppRoutes.onGenerateRoute,
+        );
+      },
     );
   }
 }

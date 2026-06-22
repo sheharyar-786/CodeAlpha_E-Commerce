@@ -13,8 +13,9 @@ class ProductDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AppColors.darkBackground,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         children: [
           // Scrollable content
@@ -25,11 +26,11 @@ class ProductDetailPage extends StatelessWidget {
                 expandedHeight: 350,
                 pinned: true,
                 stretch: true,
-                backgroundColor: AppColors.darkBackground,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 leading: Container(
                   margin: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColors.darkBackground.withOpacity(0.5),
+                    color: Colors.black.withOpacity(0.4),
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
@@ -41,7 +42,7 @@ class ProductDetailPage extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppColors.darkBackground.withOpacity(0.5),
+                      color: Colors.black.withOpacity(0.4),
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
@@ -51,9 +52,12 @@ class ProductDetailPage extends StatelessWidget {
                   ),
                 ],
                 flexibleSpace: FlexibleSpaceBar(
-                  background: Image.network(
-                    product.imageUrl,
-                    fit: BoxFit.cover,
+                  background: Hero(
+                    tag: 'product-image-${product.id}',
+                    child: Image.network(
+                      product.imageUrl,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   stretchModes: const [
                     StretchMode.zoomBackground,
@@ -66,9 +70,9 @@ class ProductDetailPage extends StatelessWidget {
               SliverToBoxAdapter(
                 child: Container(
                   padding: const EdgeInsets.all(24),
-                  decoration: const BoxDecoration(
-                    color: AppColors.darkSurface,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.darkSurface : Colors.white,
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,16 +103,19 @@ class ProductDetailPage extends StatelessWidget {
                               const SizedBox(width: 4),
                               Text(
                                 product.rating.toString(),
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: isDark ? Colors.white : AppColors.lightTextPrimary,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
                                 ),
                               ),
                               const SizedBox(width: 4),
-                              const Text(
+                              Text(
                                 '(124 reviews)',
-                                style: TextStyle(color: AppColors.textMuted, fontSize: 12),
+                                style: TextStyle(
+                                  color: isDark ? AppColors.textMuted : AppColors.lightTextSecondary, 
+                                  fontSize: 12,
+                                ),
                               ),
                             ],
                           ),
@@ -121,6 +128,7 @@ class ProductDetailPage extends StatelessWidget {
                         product.title,
                         style: Theme.of(context).textTheme.displayMedium?.copyWith(
                               fontSize: 24,
+                              color: isDark ? Colors.white : AppColors.lightTextPrimary,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -132,10 +140,10 @@ class ProductDetailPage extends StatelessWidget {
                         children: [
                           Text(
                             '\$${product.price.toStringAsFixed(2)}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.secondary,
+                              color: isDark ? AppColors.secondary : AppColors.primary,
                             ),
                           ),
                           Container(
@@ -160,7 +168,10 @@ class ProductDetailPage extends StatelessWidget {
                       const SizedBox(height: 24),
                       
                       // Divider
-                      const Divider(color: Color(0xFF2E2E50), height: 1),
+                      Divider(
+                        color: isDark ? const Color(0xFF2E2E50) : Colors.grey.shade300, 
+                        height: 1,
+                      ),
                       const SizedBox(height: 16),
                       
                       // Seller profile row
@@ -176,11 +187,17 @@ class ProductDetailPage extends StatelessWidget {
                             children: [
                               Text(
                                 product.sellerName,
-                                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold, 
+                                  color: isDark ? Colors.white : AppColors.lightTextPrimary,
+                                ),
                               ),
-                              const Text(
+                              Text(
                                 'Verified Level 2 Seller',
-                                style: TextStyle(color: AppColors.textMuted, fontSize: 11),
+                                style: TextStyle(
+                                  color: isDark ? AppColors.textMuted : AppColors.lightTextSecondary, 
+                                  fontSize: 11,
+                                ),
                               ),
                             ],
                           ),
@@ -188,27 +205,42 @@ class ProductDetailPage extends StatelessWidget {
                           OutlinedButton(
                             onPressed: () {},
                             style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: Color(0xFF2E2E50)),
+                              side: BorderSide(
+                                color: isDark ? const Color(0xFF2E2E50) : Colors.grey.shade300,
+                              ),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
-                            child: const Text('Contact', style: TextStyle(color: Colors.white, fontSize: 12)),
+                            child: Text(
+                              'Contact', 
+                              style: TextStyle(
+                                color: isDark ? Colors.white : AppColors.lightTextPrimary, 
+                                fontSize: 12,
+                              ),
+                            ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 16),
-                      const Divider(color: Color(0xFF2E2E50), height: 1),
+                      Divider(
+                        color: isDark ? const Color(0xFF2E2E50) : Colors.grey.shade300, 
+                        height: 1,
+                      ),
                       const SizedBox(height: 24),
                       
                       // Description
-                      const Text(
+                      Text(
                         'Description',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold, 
+                          fontSize: 16, 
+                          color: isDark ? Colors.white : AppColors.lightTextPrimary,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         product.description,
-                        style: const TextStyle(
-                          color: AppColors.textSecondary,
+                        style: TextStyle(
+                          color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary,
                           height: 1.6,
                           fontSize: 14,
                         ),
@@ -229,8 +261,13 @@ class ProductDetailPage extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
               decoration: BoxDecoration(
-                color: AppColors.darkBackground.withOpacity(0.9),
-                border: const Border(top: BorderSide(color: Color(0xFF2E2E50), width: 1.5)),
+                color: (isDark ? AppColors.darkBackground : Colors.white).withOpacity(0.95),
+                border: Border(
+                  top: BorderSide(
+                    color: isDark ? const Color(0xFF2E2E50) : Colors.grey.shade300, 
+                    width: 1.5,
+                  ),
+                ),
               ),
               child: Row(
                 children: [
@@ -253,10 +290,10 @@ class ProductDetailPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Add To Cart',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: isDark ? Colors.white : AppColors.lightTextPrimary,
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
                         ),
