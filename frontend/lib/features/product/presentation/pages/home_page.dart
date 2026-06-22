@@ -259,39 +259,46 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        BlocBuilder<AuthBloc, AuthState>(
-                          builder: (context, state) {
-                            String name = 'Shopper';
-                            UserRole role = UserRole.buyer;
-                            if (state is Authenticated) {
-                              name = state.user.name;
-                              role = state.user.role;
-                            }
-                            final isDark = Theme.of(context).brightness == Brightness.dark;
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Hello, $name!',
-                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: isDark ? Colors.white : AppColors.lightTextPrimary,
-                                      ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  role == UserRole.seller 
-                                      ? 'Seller Portal active'
-                                      : 'Explore custom handpicks for you',
-                                  style: TextStyle(
-                                    color: isDark ? AppColors.textMuted : AppColors.lightTextSecondary, 
-                                    fontSize: 13,
+                        Expanded(
+                          child: BlocBuilder<AuthBloc, AuthState>(
+                            builder: (context, state) {
+                              String name = 'Shopper';
+                              UserRole role = UserRole.buyer;
+                              if (state is Authenticated) {
+                                name = state.user.name;
+                                role = state.user.role;
+                              }
+                              final isDark = Theme.of(context).brightness == Brightness.dark;
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Hello, $name!',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: isDark ? Colors.white : AppColors.lightTextPrimary,
+                                        ),
                                   ),
-                                ),
-                              ],
-                            );
-                          },
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    role == UserRole.seller 
+                                        ? 'Seller Portal active'
+                                        : 'Explore custom handpicks for you',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: isDark ? AppColors.textMuted : AppColors.lightTextSecondary, 
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
                         ),
+                        const SizedBox(width: 8),
                         
                         // Action Buttons (Theme / Cart / Dashboard / Logout)
                         Row(
