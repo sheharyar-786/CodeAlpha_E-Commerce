@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../data/models/product_model.dart';
 import '../../../auth/data/repositories/auth_repository.dart';
@@ -78,6 +79,21 @@ class ProductRepository {
       createdAt: DateTime.now().subtract(const Duration(days: 8)),
     ),
   ];
+
+  Future<void> seedProductsIfEmpty() async {
+    if (AuthRepository.useMock) return;
+    try {
+      final snapshot = await firestore.collection('products').limit(1).get();
+      if (snapshot.docs.isEmpty) {
+        for (var product in _mockProducts) {
+          await firestore.collection('products').doc(product.id).set(product.toMap());
+        }
+        debugPrint('Firestore seeded with premium default products.');
+      }
+    } catch (e) {
+      debugPrint('Error seeding Firestore products: $e');
+    }
+  }
 
   Future<List<ProductModel>> fetchProducts({String? category}) async {
     if (AuthRepository.useMock) {

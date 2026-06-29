@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/theme.dart';
 import '../../../../app/routes.dart';
+import '../../data/models/user_model.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_state.dart';
 
@@ -19,7 +20,11 @@ class _SplashPageState extends State<SplashPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final state = context.read<AuthBloc>().state;
       if (state is Authenticated) {
-        Navigator.pushReplacementNamed(context, AppRoutes.home);
+        if (state.user.role == UserRole.seller) {
+          Navigator.pushReplacementNamed(context, AppRoutes.sellerDashboard);
+        } else {
+          Navigator.pushReplacementNamed(context, AppRoutes.home);
+        }
       } else if (state is Unauthenticated || state is AuthFailure) {
         Navigator.pushReplacementNamed(context, AppRoutes.welcome);
       }
@@ -31,7 +36,11 @@ class _SplashPageState extends State<SplashPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is Authenticated) {
-          Navigator.pushReplacementNamed(context, AppRoutes.home);
+          if (state.user.role == UserRole.seller) {
+            Navigator.pushReplacementNamed(context, AppRoutes.sellerDashboard);
+          } else {
+            Navigator.pushReplacementNamed(context, AppRoutes.home);
+          }
         } else if (state is Unauthenticated || state is AuthFailure) {
           Navigator.pushReplacementNamed(context, AppRoutes.welcome);
         }

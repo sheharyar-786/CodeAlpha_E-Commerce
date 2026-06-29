@@ -21,6 +21,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   ) async {
     emit(ProductLoading());
     try {
+      // Auto-seed Firestore database if empty
+      await _productRepository.seedProductsIfEmpty();
+      
       final products = await _productRepository.fetchProducts(category: event.category);
       emit(ProductsLoaded(products: products));
     } catch (e) {

@@ -206,16 +206,41 @@ class _AddProductPageState extends State<AddProductPage> {
                 ],
               ),
 
-              // Category dropdown
-              const Text('Category', style: TextStyle(fontSize: 13, color: AppColors.textPrimary, fontWeight: FontWeight.bold)),
+              // Category dropdown label
+              Text(
+                'Category',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? AppColors.textPrimary
+                      : AppColors.lightTextPrimary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
-                dropdownColor: AppColors.darkSurface,
+                dropdownColor: Theme.of(context).brightness == Brightness.dark
+                    ? AppColors.darkSurface
+                    : Colors.white,
+                style: TextStyle(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : AppColors.lightTextPrimary,
+                  fontSize: 14,
+                ),
                 items: _categories.map((cat) {
                   return DropdownMenuItem(
                     value: cat,
-                    child: Text(cat, style: const TextStyle(color: Colors.white, fontSize: 14)),
+                    child: Text(
+                      cat,
+                      style: TextStyle(
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : AppColors.lightTextPrimary,
+                        fontSize: 14,
+                      ),
+                    ),
                   );
                 }).toList(),
                 onChanged: (val) {

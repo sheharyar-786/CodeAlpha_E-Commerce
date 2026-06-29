@@ -114,7 +114,11 @@ class _SignupPageState extends State<SignupPage> {
                 backgroundColor: AppColors.success,
               ),
             );
-            Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (route) => false);
+            if (state.user.role == UserRole.seller) {
+              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.sellerDashboard, (route) => false);
+            } else {
+              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (route) => false);
+            }
           } else if (state is AuthFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -254,10 +258,8 @@ class _SignupPageState extends State<SignupPage> {
                   Row(
                     children: [
                       _buildRoleCard('Buy Products', 'Browse & Purchase', Icons.shopping_cart_outlined, UserRole.buyer),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 12),
                       _buildRoleCard('Sell Products', 'List & Earn', Icons.storefront_outlined, UserRole.seller),
-                      const SizedBox(width: 8),
-                      _buildRoleCard('Both', 'Buy & Sell items', Icons.swap_horiz_outlined, UserRole.both),
                     ],
                   ),
                   const SizedBox(height: 40),

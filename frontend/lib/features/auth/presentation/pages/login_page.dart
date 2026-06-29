@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/theme.dart';
 import '../../../../app/routes.dart';
+import '../../data/models/user_model.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -55,7 +56,11 @@ class _LoginPageState extends State<LoginPage> {
                 backgroundColor: AppColors.success,
               ),
             );
-            Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (route) => false);
+            if (state.user.role == UserRole.seller) {
+              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.sellerDashboard, (route) => false);
+            } else {
+              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (route) => false);
+            }
           } else if (state is AuthFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

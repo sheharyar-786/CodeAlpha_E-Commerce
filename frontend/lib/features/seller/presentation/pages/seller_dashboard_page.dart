@@ -5,6 +5,7 @@ import '../../../../app/routes.dart';
 import '../../../../core/widgets/image_helper.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
+import '../../../auth/presentation/bloc/auth_event.dart';
 import '../../../product/presentation/bloc/product_bloc.dart';
 import '../../../product/presentation/bloc/product_event.dart';
 import '../../../product/presentation/bloc/product_state.dart';
@@ -210,13 +211,22 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> with SingleTi
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.darkBackground,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Seller Dashboard'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: Navigator.canPop(context)
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+                onPressed: () => Navigator.pop(context),
+              )
+            : IconButton(
+                icon: const Icon(Icons.logout, color: AppColors.error),
+                onPressed: () {
+                  context.read<AuthBloc>().add(SignOutRequested());
+                  Navigator.pushNamedAndRemoveUntil(context, AppRoutes.welcome, (route) => false);
+                },
+                tooltip: 'Logout',
+              ),
         actions: [
           IconButton(
             icon: const Icon(Icons.add_circle_outline, color: AppColors.secondary),
