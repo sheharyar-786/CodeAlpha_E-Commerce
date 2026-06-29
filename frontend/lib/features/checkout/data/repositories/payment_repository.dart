@@ -7,7 +7,7 @@ class PaymentRepository {
   // and fallback to 10.0.2.2 for Android Emulator.
   static String get baseUrl {
     if (kIsWeb) return 'http://localhost:5000';
-    return 'http://127.0.0.1:5000';
+    return 'http://192.168.100.12:5000';
   }
 
   Future<Map<String, dynamic>?> createStripePaymentIntent({
